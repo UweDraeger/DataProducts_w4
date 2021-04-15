@@ -1,5 +1,5 @@
 library(shiny)
-library(plotly)
+library(plotly )
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -28,7 +28,13 @@ shinyUI(fluidPage(
                 tabPanel("Histograms", 
                          plotlyOutput("distance"),
                          plotlyOutput("fuel"),
-                         plotlyOutput("paid"))
+                         plotlyOutput("paid")),
+                
+                tabPanel("Price history",
+                         plotlyOutput("price")),
+                
+                tabPanel("Fuel Consumption",
+                         plotlyOutput("cons"))
             )
         )
     )

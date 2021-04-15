@@ -75,5 +75,28 @@ shinyServer(function(input, output) {
                  x = "Amount",
                  y = "Count")
     })    
+
+    output$price <- renderPlotly({
+        ggplot(
+            data = AUTO2 %>%
+                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            aes(x = Date, y = ppl)) +
+            geom_line() +
+            labs(title = "Price in Euro per litre",
+                 x = "Date",
+                 y = "Price")
+    })    
+
+    output$cons <- renderPlotly({
+        ggplot(
+            data = AUTO2 %>%
+                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            aes(x = Date, y = cons)) +
+            geom_line() +
+            labs(title = "Fuel consumption in litres / 100 km",
+                 x = "Date",
+                 y = "Consumption")
+    })    
+    
     
 })
