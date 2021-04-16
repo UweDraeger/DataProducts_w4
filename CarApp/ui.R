@@ -11,11 +11,17 @@ shinyUI(fluidPage(
         sidebarPanel(
             dateRangeInput(
                 "DateRange",
-                "Date range: ",
+                "Select a date range",
                 start = "2013-01-01",
                 end = "2021-05-31",
                 format = "yyyy-mm-dd",
                 separator = "-"
+            ),
+            
+            selectInput(
+                "SelectedYear",
+                "or pick a single year",
+                choices = c(2013:2021)
             )
         ),
         

@@ -27,14 +27,16 @@ AUTO2 <- AUTO2 %>%
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-    output$RangeStart <- renderPrint({input$DateRange[1]})
-    output$RangeEnd <- renderPrint({input$DateRange[2]})
-    
+
     
     output$odometer <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+#           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+        )
+    
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = Date, y = odometer)) +
             geom_point() +
             geom_smooth() +
@@ -44,9 +46,12 @@ shinyServer(function(input, output) {
     })
 
     output$distance <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+                   #           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+            )
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = distance)) +
             geom_histogram() +
             labs(title = "Distances between refills in kilometres",
@@ -55,9 +60,13 @@ shinyServer(function(input, output) {
     })    
 
     output$fuel <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+                   #           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+            )
+
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = fuel)) +
             geom_histogram() +
             labs(title = "Refill amounts in litres",
@@ -66,9 +75,12 @@ shinyServer(function(input, output) {
     })    
 
     output$paid <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+                   #           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+            )
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = paid)) +
             geom_histogram() +
             labs(title = "Amounts paid in Euro",
@@ -77,22 +89,30 @@ shinyServer(function(input, output) {
     })    
 
     output$price <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+                   #           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+            )
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = Date, y = ppl)) +
-            geom_line() +
+            geom_point() +
+            geom_smooth() +
             labs(title = "Price in Euro per litre",
                  x = "Date",
                  y = "Price")
     })    
 
     output$cons <- renderPlotly({
+        AUTO3 <- AUTO2 %>%
+            filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear),"-01-01")))
+                   #           filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
+            )
         ggplot(
-            data = AUTO2 %>%
-                filter(Date >= input$DateRange[1] & Date <= input$DateRange[2]),
+            data = AUTO3,
             aes(x = Date, y = cons)) +
-            geom_line() +
+            geom_point() +
+            geom_smooth() +
             labs(title = "Fuel consumption in litres / 100 km",
                  x = "Date",
                  y = "Consumption")
