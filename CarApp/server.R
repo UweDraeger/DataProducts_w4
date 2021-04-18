@@ -42,6 +42,21 @@ shinyServer(function(input, output) {
                                  Date <= input$DateRange[2])
     })
     
+    output$odoStart <- reactive({
+        min(AUTO3()$odometer)
+    })
+    
+    output$odoEnd <- reactive({
+        max(AUTO3()$odometer)
+    })
+    
+    output$odoTotal <- reactive({
+        max(AUTO3()$odometer) - min(AUTO3()$odometer)
+    })
+   
+    output$meanDistance <- reactive({
+        mean(AUTO3()$distance)
+    }) 
     
     output$odometer <- renderPlotly({
         ggplot(
@@ -100,7 +115,7 @@ shinyServer(function(input, output) {
             data = AUTO3(),
             aes(x = Date, y = cons)) +
             geom_point() +
-            geom_smooth() +
+            geom_smooth(method = "lm") +
             labs(title = "Fuel consumption in litres / 100 km",
                  x = "Date",
                  y = "Consumption")
