@@ -28,10 +28,12 @@ AUTO2 <- AUTO2 %>%
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
+    # return selection from radio buttom
     RadioChoice <- reactive({
         RadioChoice <- input$Radio
     })
     
+    # filter initial data to selection from radio button
     AUTO3 <- reactive({
         if (RadioChoice() == "Year")
             AUTO2 %>% filter(year(Date) == year(as_date(paste(
@@ -42,22 +44,60 @@ shinyServer(function(input, output) {
                                  Date <= input$DateRange[2])
     })
     
-    output$odoStart <- reactive({
-        min(AUTO3()$odometer)
+    # create summary tables 
+    odoSummTable <- reactive({
+        tribble(
+            ~item, ~value, ~date,
+            "Start value (km)", min(AUTO3()$odometer), min(AUTO3()$Date),
+            "Start value (km)", max(AUTO3()$odometer), max(AUTO3()$Date),
+            "Total distance (km)", max(AUTO3()$odometer) - min(AUTO3()$odometer), NA
+            )
+        })
+
+
+    nrefills <- reactive({
+        nrow(AUTO3())
     })
     
-    output$odoEnd <- reactive({
-        max(AUTO3()$odometer)
+    distSummTable <- reactive({
+        tribble(
+            ~item, ~value,
+            "Minimum", min(AUTO3()$distance),
+            "Maximum", max(AUTO3()$distance), 
+            "Average", mean(AUTO3()$distance)
+            )
+        })
+
+    litreSummTable <- reactive({
+        tribble(
+            ~item, ~value,
+            "Minimum", min(AUTO3()$fuel),
+            "Maximum", max(AUTO3()$fuel), 
+            "Average", mean(AUTO3()$fuel)
+        )
+    })
+ 
+    paidSummTable <- reactive({
+        tribble(
+            ~item, ~value,
+            "Minimum", min(AUTO3()$paid),
+            "Maximum", max(AUTO3()$paid), 
+            "Average", mean(AUTO3()$paid)
+        )
     })
     
-    output$odoTotal <- reactive({
-        max(AUTO3()$odometer) - min(AUTO3()$odometer)
-    })
-   
-    output$meanDistance <- reactive({
-        mean(AUTO3()$distance)
-    }) 
     
+    output$nrefills <- renderText(nrefills())
+    
+    # Tables
+    output$odoSummary <- renderTable(odoSummTable())
+    output$distSummary <- renderTable(distSummTable())
+    output$litreSummary <- renderTable(litreSummTable())
+    output$euroSummary <- renderTable(paidSummTable())
+    
+    
+    
+    # Charts
     output$odometer <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -74,7 +114,7 @@ shinyServer(function(input, output) {
             data = AUTO3(),
             aes(x = distance)) +
             geom_histogram() +
-            labs(title = "Distances between refills in kilometres",
+            labs(title = "",
                  x = "Distance",
                  y = "Count")
     })    
@@ -84,7 +124,7 @@ shinyServer(function(input, output) {
             data = AUTO3(),
             aes(x = fuel)) +
             geom_histogram() +
-            labs(title = "Refill amounts in litres",
+            labs(title = "",
                  x = "Amount",
                  y = "Count")
     })    
