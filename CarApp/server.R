@@ -3,6 +3,7 @@ library(tidyverse)
 library(lubridate)
 library(plotly)
 
+
 # Load data and rename variables
 
 AUTO2 <- tibble(read_delim(
