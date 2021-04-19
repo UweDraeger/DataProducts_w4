@@ -12,7 +12,7 @@ shinyUI(fluidPage(fluidRow(
         sidebarPanel(
             radioButtons(
                 "Radio",
-                h2("Select full year or range"),
+                h2("Select a year or specify a period"),
                 choices = list("Year" = "Year", "Period" = "Range")
             ),
             
@@ -39,9 +39,6 @@ shinyUI(fluidPage(fluidRow(
             
             tabPanel(
                 "Refills",
-                h4("Number of refills: "), 
-                h4(textOutput("nrefills")),
-
                 h4("Distances between refills in kilometres"),
                 h5(tableOutput("distSummary")),
                 plotlyOutput("distance"),

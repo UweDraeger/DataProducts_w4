@@ -48,10 +48,8 @@ shinyServer(function(input, output) {
     # create summary tables 
     odoSummTable <- reactive({
         tribble(
-            ~item, ~value, ~date,
-            "Start value (km)", min(AUTO3()$odometer), min(AUTO3()$Date),
-            "Start value (km)", max(AUTO3()$odometer), max(AUTO3()$Date),
-            "Total distance (km)", max(AUTO3()$odometer) - min(AUTO3()$odometer), NA
+            ~Start, ~End, ~Total,
+            min(AUTO3()$odometer), max(AUTO3()$odometer), max(AUTO3()$odometer) - min(AUTO3()$odometer)
             )
         })
 
@@ -108,7 +106,7 @@ shinyServer(function(input, output) {
         ggplot(
             data = AUTO3(),
             aes(x = distance)) +
-            geom_histogram() +
+            geom_histogram(binwidth = 50) +
             labs(title = "",
                  x = "Distance",
                  y = "Count")
@@ -118,7 +116,7 @@ shinyServer(function(input, output) {
         ggplot(
             data = AUTO3(),
             aes(x = fuel)) +
-            geom_histogram() +
+            geom_histogram(binwidth = 5) +
             labs(title = "",
                  x = "Amount",
                  y = "Count")
@@ -128,7 +126,7 @@ shinyServer(function(input, output) {
         ggplot(
             data = AUTO3(),
             aes(x = paid)) +
-            geom_histogram() +
+            geom_histogram(binwidth = 5) +
             labs(title = "",
                  x = "Amount",
                  y = "Count")

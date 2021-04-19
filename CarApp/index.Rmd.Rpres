@@ -1,0 +1,44 @@
+Fuel Consumption Monitoring
+========================================================
+author: Uwe Draeger
+date: 2021-04-19
+autosize: true
+
+Fuel Consumption Monitoring
+========================================================
+
+A small tool to provide some summaries and visualizations.
+
+Functionality:
+Analysis can be performed by year or any arbitrary period.
+
+
+- Display total distance on the odometer
+- History of refills
+- History of fuel price
+- Calculation of fuel consumed
+
+
+Fuel Consumption Monitoring
+========================================================
+
+```{r}
+summary(cars)
+```
+
+Fuel Consumption Monitoring
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Fuel Consumption Monitoring
+========================================================
+Potential enhancements:
+
+- Import wizard for different file formats
+-- Excel, Database, more/less columns
+
+- Advanced analytics
+-- specify prediction functions for future fuel price or fuel consumption
