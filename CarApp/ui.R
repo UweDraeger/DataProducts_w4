@@ -32,17 +32,25 @@ shinyUI(fluidPage(fluidRow(
         # Show a plot of the generated distribution
         mainPanel(tabsetPanel(
             tabPanel("Odometer",
-                     h5("Value displayed on the odometer for the period specified."),
-                     h5(paste("Start value (km): "), verbatimTextOutput("odoStart")),
-                     h5(paste("End value (km) : "), verbatimTextOutput("odoEnd")),
-                     h5(paste("Total distance (km) : "), verbatimTextOutput("odoTotal")),
+                     h4("Value displayed on the odometer for the period specified."),
+                     h5(tableOutput("odoSummary")),
                      plotlyOutput("odometer")),
             
             tabPanel(
                 "Refills",
-                h5("Average distance between refills (km) : ", textOutput("meanDistance")),
+                h4("Number of refills: "), 
+                h4(textOutput("nrefills")),
+
+                h4("Distances between refills in kilometres"),
+                h5(tableOutput("distSummary")),
                 plotlyOutput("distance"),
+                
+                h4("Fuel refilled in litres"),
+                h5(tableOutput("litreSummary")),
                 plotlyOutput("fuel"),
+                
+                h4("Money paid in Euro"),
+                h5(tableOutput("euroSummary")),
                 plotlyOutput("paid")
             ),
             
