@@ -56,6 +56,8 @@ shinyUI(fluidPage(fluidRow(
                      plotlyOutput("price")),
             
             tabPanel("Fuel Consumption",
+                     h4("Fuel consumption in l / 100 km"),
+                     h5(tableOutput("consSummary")),
                      plotlyOutput("cons"))
         ))
     )

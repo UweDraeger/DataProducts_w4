@@ -5,7 +5,6 @@ library(plotly)
 
 
 # Load data and rename variables
-
 AUTO2 <- tibble(read_delim(
     "AUTO2.csv",
     ";",
@@ -26,10 +25,10 @@ AUTO2 <- AUTO2 %>%
     )
 
 
-# Define server logic required to draw a histogram
+# Shiny server 
 shinyServer(function(input, output) {
 
-    # return selection from radio buttom
+    # return selection from radio button
     RadioChoice <- reactive({
         RadioChoice <- input$Radio
     })
@@ -46,6 +45,10 @@ shinyServer(function(input, output) {
     })
     
     # create summary tables 
+    nrefills <- reactive({
+        nrow(AUTO3())
+    })
+    
     odoSummTable <- reactive({
         tribble(
             ~Start, ~End, ~Total,
@@ -53,11 +56,6 @@ shinyServer(function(input, output) {
             )
         })
 
-
-    nrefills <- reactive({
-        nrow(AUTO3())
-    })
-    
     distSummTable <- reactive({
         tribble(
             ~Count, ~Minimum, ~Maximum, ~Average,
@@ -68,7 +66,7 @@ shinyServer(function(input, output) {
     litreSummTable <- reactive({
         tribble(
             ~Count, ~Minimum, ~Maximum, ~Average,
-            nrow(AUTO3()), min(AUTO3()$fuel), max(AUTO3()$fuel), mean(AUTO3()$fuel)
+            nrow(AUTO3()), min(AUTO3()$fuel, na.rm = TRUE), max(AUTO3()$fuel, na.rm = TRUE), mean(AUTO3()$fuel, na.rm = TRUE)
         )
     })
  
@@ -79,6 +77,12 @@ shinyServer(function(input, output) {
         )
     })
     
+    consSummTable <- reactive({
+        tribble(
+            ~Count, ~Minimum, ~Maximum, ~Average,
+            nrow(AUTO3()), min(AUTO3()$cons, na.rm = TRUE), max(AUTO3()$cons, na.rm = TRUE), mean(AUTO3()$cons, na.rm = TRUE)
+        )
+    })
     
     output$nrefills <- renderText(nrefills())
     
@@ -87,7 +91,7 @@ shinyServer(function(input, output) {
     output$distSummary <- renderTable(distSummTable())
     output$litreSummary <- renderTable(litreSummTable())
     output$euroSummary <- renderTable(paidSummTable())
-    
+    output$consSummary <- renderTable(consSummTable())
     
     
     # Charts
@@ -149,7 +153,7 @@ shinyServer(function(input, output) {
             aes(x = Date, y = cons)) +
             geom_point() +
             geom_smooth(method = "lm") +
-            labs(title = "Fuel consumption in litres / 100 km",
+            labs(title = "",
                  x = "Date",
                  y = "Consumption")
     })    
