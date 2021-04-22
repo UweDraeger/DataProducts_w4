@@ -52,13 +52,23 @@ shinyUI(fluidPage(fluidRow(
                 plotlyOutput("paid")
             ),
             
-            tabPanel("Price history",
+            tabPanel("Prices",
+                     h4("Fuel price per litre over time"),
                      plotlyOutput("price")),
             
-            tabPanel("Fuel Consumption",
+            tabPanel("Fuel",
                      h4("Fuel consumption in l / 100 km"),
                      h5(tableOutput("consSummary")),
-                     plotlyOutput("consTrellis"))
+                     plotlyOutput("cons")),
+            
+            tabPanel("Documentation",
+                     h4("Select either a single year or chose a specific period from the menue on the left."),
+                     h4("Then pick a tab to get more information."),
+                     h4("Odometer - shows the total kilometres travelled"),
+                     h4("Refills - shows summary information for refills"),
+                     h4("Prices - shows the price of the refills"),
+                     h4("Fuel - shows the average fuel consumption")
+            )
         ))
     )
 )))

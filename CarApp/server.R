@@ -142,7 +142,7 @@ shinyServer(function(input, output) {
             aes(x = Date, y = ppl)) +
             geom_point() +
             geom_smooth() +
-            labs(title = "Price in Euro per litre",
+            labs(title = "",
                  x = "Date",
                  y = "Price")
     })    
@@ -158,15 +158,4 @@ shinyServer(function(input, output) {
                  y = "Consumption")
     })    
 
-    output$consTrellis <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = Date, y = cons, facet_warp(vars(factor(year(Date)))))) +
-            geom_point() +
-            geom_smooth(method = "lm") +
-            labs(title = "",
-                 x = "Date",
-                 y = "Consumption")
-    })    
-    
 })
