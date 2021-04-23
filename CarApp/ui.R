@@ -32,6 +32,14 @@ shinyUI(fluidPage(fluidRow(
         
         # Show a plot of the generated distribution
         mainPanel(tabsetPanel(
+            tabPanel("Description",
+                     h4("Select either a single year or chose a specific period from the menue on the left."),
+                     h4("Then pick a tab to get more information."),
+                     h4("Odometer - shows the total kilometres driven"),
+                     h4("Refills - shows summary information for refills"),
+                     h4("Prices - shows the price of the refills"),
+                     h4("Fuel - shows the average fuel consumption")),
+
             tabPanel("Odometer",
                      h4("Value displayed on the odometer for the period specified."),
                      h5(tableOutput("odoSummary")),
@@ -52,23 +60,15 @@ shinyUI(fluidPage(fluidRow(
                 plotlyOutput("paid")
             ),
             
-            tabPanel("Prices",
+            tabPanel("Fuel price history",
                      h4("Fuel price per litre over time"),
                      plotlyOutput("price")),
             
-            tabPanel("Fuel",
+            tabPanel("Fuel consumption",
                      h4("Fuel consumption in l / 100 km"),
                      h5(tableOutput("consSummary")),
-                     plotlyOutput("cons")),
+                     plotlyOutput("cons"))
             
-            tabPanel("Documentation",
-                     h4("Select either a single year or chose a specific period from the menue on the left."),
-                     h4("Then pick a tab to get more information."),
-                     h4("Odometer - shows the total kilometres travelled"),
-                     h4("Refills - shows summary information for refills"),
-                     h4("Prices - shows the price of the refills"),
-                     h4("Fuel - shows the average fuel consumption")
-            )
         ))
     )
 )))

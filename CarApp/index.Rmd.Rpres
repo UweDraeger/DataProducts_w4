@@ -40,5 +40,9 @@ Potential enhancements:
 - Import wizard for different file formats
 -- Excel, Database, more/less columns
 
+- Enable more than a single car
+-- manage a fleet of cars
+-- enable comparisons along different dimensions, spotting outliers
+
 - Advanced analytics
 -- specify prediction functions for future fuel price and/or fuel consumption
