@@ -4,7 +4,7 @@ library(plotly )
 
 
 # Define UI
-shinyUI(fluidPage(theme=shinytheme("united"), 
+shinyUI(fluidPage(theme = shinytheme("united"), 
     fluidRow(
     # Application title
     titlePanel(h1("Monitoring fuel consumption")),
@@ -33,7 +33,6 @@ shinyUI(fluidPage(theme=shinytheme("united"),
             
             br(),
             h3("Tabs"),
-            br(),
             h4("Odometer - Total kilometres"),
             h4("Refills - Information on refills"),
             h4("Prices - Fuel price at refill"),
