@@ -22,8 +22,35 @@ Analysis can be performed by year or any arbitrary period.
 Fuel Consumption Monitoring
 ========================================================
 
-```{r}
-summary(cars)
+```{r, echo = FALSE}
+library(shiny)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+
+setwd("~/Coursera/Scripts and Data/Developing Data Products/DataProducts_w4/CarApp")
+# Load data and rename variables
+
+AUTO2 <- tibble(read_delim(
+        "AUTO2.csv",
+        ";",
+        escape_double = FALSE,
+        col_types = cols(Datum = col_date(format = "%d/%m/%Y"),
+                         X8 = col_skip()),
+        trim_ws = TRUE
+))
+AUTO2 <- AUTO2 %>%
+        rename(
+                Date = Datum,
+                odometer = Kilometerstand,
+                distance = Gefahren,
+                fuel = Getankt,
+                paid = Bezahlt,
+                ppl = Preis,
+                cons = Verbrauch
+        )
+
+
 ```
 
 Fuel Consumption Monitoring
@@ -71,12 +98,18 @@ Fuel Consumption Monitoring
 ========================================================
 Potential enhancements:
 
-- Import wizard for different file formats
--- Excel, Database, more/less columns
+- Import wizard for different file formats 
+<br>
+-- Excel, database, more/less columns
 
-- Enable more than a single car
+- Enable more than one car
+<br>
 -- manage a fleet of cars
--- enable comparisons along different dimensions, spotting outliers
+<br>
+-- enable comparisons along different dimensions, 
+<br> 
+-- help spotting outliers
 
 - Advanced analytics
--- specify prediction functions for future fuel price and/or fuel consumption
+<br>
+-- specify prediction functions for future fuel consumption and costs

@@ -12,7 +12,7 @@ shinyUI(fluidPage(fluidRow(
         sidebarPanel(
             radioButtons(
                 "Radio",
-                h2("Select a year or specify a period"),
+                h2("Select period: Single year or a specific period."),
                 choices = list("Year" = "Year", "Period" = "Range")
             ),
             
@@ -27,19 +27,21 @@ shinyUI(fluidPage(fluidRow(
                 end = "2021-05-31",
                 format = "yyyy-mm-dd",
                 separator = "-"
-            )
+            ),
+            
+            br(),
+            h3("Tabs for more information"),
+            br(),
+            h4("Odometer - Total kilometres"),
+            h4("Refills - Information on refills"),
+            h4("Prices - Fuel price at refill"),
+            h4("Fuel - Fuel consumption"),
+            h4("Data - Raw data"),
+            br()
         ),
-        
+
         # Show a plot of the generated distribution
         mainPanel(tabsetPanel(
-            tabPanel("Description",
-                     h4("Select either a single year or chose a specific period from the menue on the left."),
-                     h4("Then pick a tab to get more information."),
-                     h4("Odometer - shows the total kilometres driven"),
-                     h4("Refills - shows summary information for refills"),
-                     h4("Prices - shows the price of the refills"),
-                     h4("Fuel - shows the average fuel consumption")),
-
             tabPanel("Odometer",
                      h4("Value displayed on the odometer for the period specified."),
                      h5(tableOutput("odoSummary")),
@@ -57,8 +59,7 @@ shinyUI(fluidPage(fluidRow(
                 
                 h4("Money paid in Euro"),
                 h5(tableOutput("euroSummary")),
-                plotlyOutput("paid")
-            ),
+                plotlyOutput("paid")),
             
             tabPanel("Fuel price history",
                      h4("Fuel price per litre over time"),
@@ -67,8 +68,11 @@ shinyUI(fluidPage(fluidRow(
             tabPanel("Fuel consumption",
                      h4("Fuel consumption in l / 100 km"),
                      h5(tableOutput("consSummary")),
-                     plotlyOutput("cons"))
-            
+                     plotlyOutput("cons")),
+        
+            tabPanel("Data",
+                     h4("Data"),
+                     h5(tableOutput("dataSummary"))
         ))
-    )
+    ))
 )))

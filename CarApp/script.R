@@ -52,4 +52,7 @@ ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = cons)) +
 ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = distance)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "", y = "km") +
+  scale_x_continuous(breaks = c(0.25, .5, .75, 1),
+                     labels = c("Mar", "Jun", "Sep", "Dec")) +
   facet_wrap(vars(year(Date)))

@@ -84,6 +84,11 @@ shinyServer(function(input, output) {
         )
     })
     
+    dataSummTable <- reactive({
+        AUTO3() %>%
+            mutate(Date = as.character(AUTO3()$Date))
+    })
+        
     output$nrefills <- renderText(nrefills())
     
     # Tables
@@ -92,7 +97,7 @@ shinyServer(function(input, output) {
     output$litreSummary <- renderTable(litreSummTable())
     output$euroSummary <- renderTable(paidSummTable())
     output$consSummary <- renderTable(consSummTable())
-    
+    output$dataSummary <- renderTable(dataSummTable())
     
     # Charts
     output$odometer <- renderPlotly({
@@ -105,7 +110,6 @@ shinyServer(function(input, output) {
                  x = "Date",
                  y = "Distance in km")
     })
-
     output$distance <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -115,7 +119,6 @@ shinyServer(function(input, output) {
                  x = "Distance",
                  y = "Count")
     })    
-
     output$fuel <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -125,7 +128,6 @@ shinyServer(function(input, output) {
                  x = "Amount",
                  y = "Count")
     })    
-
     output$paid <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -135,7 +137,6 @@ shinyServer(function(input, output) {
                  x = "Amount",
                  y = "Count")
     })    
-
     output$price <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -146,7 +147,6 @@ shinyServer(function(input, output) {
                  x = "Date",
                  y = "Price")
     })    
-
     output$cons <- renderPlotly({
         ggplot(
             data = AUTO3(),
@@ -156,6 +156,6 @@ shinyServer(function(input, output) {
             labs(title = "",
                  x = "Date",
                  y = "Consumption")
-    })    
-
+    })
+   
 })
