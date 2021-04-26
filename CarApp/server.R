@@ -20,7 +20,7 @@ AUTO2 <- AUTO2 %>%
         distance = Gefahren,
         fuel = Getankt,
         paid = Bezahlt,
-        ppl = Preis,
+        price = Preis,
         cons = Verbrauch
     )
 
@@ -51,8 +51,12 @@ shinyServer(function(input, output) {
     
     odoSummTable <- reactive({
         tribble(
-            ~Start, ~End, ~Total,
-            min(AUTO3()$odometer), max(AUTO3()$odometer), max(AUTO3()$odometer) - min(AUTO3()$odometer)
+            ~StartDate, ~StartValue, ~EndDate, ~EndValue, ~Total,
+            as.character(min(AUTO3()$Date)), 
+            min(AUTO3()$odometer), 
+            as.character(max(AUTO3()$Date)),
+            max(AUTO3()$odometer), 
+            max(AUTO3()$odometer) - min(AUTO3()$odometer)
             )
         })
 
@@ -97,15 +101,16 @@ shinyServer(function(input, output) {
     output$litreSummary <- renderTable(litreSummTable())
     output$euroSummary <- renderTable(paidSummTable())
     output$consSummary <- renderTable(consSummTable())
-    output$dataSummary <- renderTable(dataSummTable())
+    output$dataSummary <- renderDataTable(dataSummTable())
     
     # Charts
     output$odometer <- renderPlotly({
         ggplot(
             data = AUTO3(),
             aes(x = Date, y = odometer)) +
-            geom_point() +
+            geom_point(color = "#dd4814") +
             geom_smooth() +
+            geom_smooth(color = "black", se = FALSE) +
             labs(title = "Odometer",
                  x = "Date",
                  y = "Distance in km")
@@ -140,9 +145,10 @@ shinyServer(function(input, output) {
     output$price <- renderPlotly({
         ggplot(
             data = AUTO3(),
-            aes(x = Date, y = ppl)) +
-            geom_point() +
+            aes(x = Date, y = price)) +
+            geom_point(color = "#dd4814") +
             geom_smooth() +
+            geom_smooth(color = "black", se = FALSE) +
             labs(title = "",
                  x = "Date",
                  y = "Price")
@@ -151,8 +157,9 @@ shinyServer(function(input, output) {
         ggplot(
             data = AUTO3(),
             aes(x = Date, y = cons)) +
-            geom_point() +
+            geom_point(color = "#dd4814") +
             geom_smooth(method = "lm") +
+            geom_smooth(method = "lm", color = "black", se = FALSE) +
             labs(title = "",
                  x = "Date",
                  y = "Consumption")

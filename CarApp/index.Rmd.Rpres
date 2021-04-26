@@ -17,6 +17,7 @@ Analysis can be performed by year or any arbitrary period.
 - History of refills
 - History of fuel price
 - Calculation of fuel consumed
+- View raw data
 
 
 Fuel Consumption Monitoring
@@ -109,7 +110,13 @@ Potential enhancements:
 -- enable comparisons along different dimensions, 
 <br> 
 -- help spotting outliers
-
-- Advanced analytics
+<br> 
+- Simple analytics
+<br> 
+-- switch units between l/100km and miles per galon
+<br> 
+-- annual summaries
+<br> 
+- More advanced analytics
 <br>
 -- specify prediction functions for future fuel consumption and costs

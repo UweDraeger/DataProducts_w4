@@ -1,9 +1,11 @@
 library(shiny)
+library(shinythemes)
 library(plotly )
 
 
 # Define UI
-shinyUI(fluidPage(fluidRow(
+shinyUI(fluidPage(theme=shinytheme("united"), 
+    fluidRow(
     # Application title
     titlePanel(h1("Monitoring fuel consumption")),
     
@@ -30,7 +32,7 @@ shinyUI(fluidPage(fluidRow(
             ),
             
             br(),
-            h3("Tabs for more information"),
+            h3("Tabs"),
             br(),
             h4("Odometer - Total kilometres"),
             h4("Refills - Information on refills"),
@@ -61,18 +63,18 @@ shinyUI(fluidPage(fluidRow(
                 h5(tableOutput("euroSummary")),
                 plotlyOutput("paid")),
             
-            tabPanel("Fuel price history",
+            tabPanel("Prices",
                      h4("Fuel price per litre over time"),
                      plotlyOutput("price")),
             
-            tabPanel("Fuel consumption",
+            tabPanel("Fuel",
                      h4("Fuel consumption in l / 100 km"),
                      h5(tableOutput("consSummary")),
                      plotlyOutput("cons")),
         
             tabPanel("Data",
                      h4("Data"),
-                     h5(tableOutput("dataSummary"))
+                     h5(dataTableOutput("dataSummary"))
         ))
     ))
 )))
