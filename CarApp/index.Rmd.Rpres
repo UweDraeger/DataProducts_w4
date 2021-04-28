@@ -44,48 +44,31 @@ AUTO2 <- tibble(read_delim(
 ))
 
 AUTO2 <- AUTO2 %>%
-        rename(Date = Datum,
-               odometer = Kilometerstand,
-               distance = Gefahren,
-               fuel = Getankt,
-               paid = Bezahlt,
-               ppl = Preis,
-               cons = Verbrauch)
+  rename(
+    Date = Datum,
+    odometer = Kilometerstand,
+    distance = Gefahren,
+    fuel = Getankt,
+    paid = Bezahlt,
+    ppl = Preis,
+    cons = Verbrauch) %>%
+  mutate(year = year(Date))
 
 ```
 
 
 ```{r, echo = FALSE}
+
 ggplot(
   data = AUTO2,
   aes(x = Date, y = cons)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(title = "Fuel Consumption", x = "Date", y = "l / 100 km") +
+  labs(title = "Fuel consumption", x = "Date", y = "l / 100 km") +
   ylim(4, 12)
 
 ```
 
-Fuel Consumption Monitoring
-========================================================
-
-Example for future development:
-<br>
-
-Provide multi-year displays and summary information
-<br>
-
-```{r, echo=FALSE}
-
-ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = cons)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "", y = "l / 100 km") +
-  scale_x_continuous(breaks = c(0.25, .5, .75, 1),
-                     labels = c("Mar", "Jun", "Sep", "Dec")) +
-  facet_wrap(vars(year(Date)))
-
-```
 
 Fuel Consumption Monitoring
 ========================================================
@@ -99,7 +82,7 @@ Potential enhancements:
 <br>
 -- manage a fleet of cars
 <br>
--- enable comparisons along different dimensions, 
+-- enable comparisons along different dimensions
 <br> 
 -- help spotting outliers
 <br> 
@@ -112,3 +95,32 @@ Potential enhancements:
 - More advanced analytics
 <br>
 -- specify prediction functions for future fuel consumption and costs
+
+Fuel Consumption Monitoring
+========================================================
+
+Example for future development:
+<br>
+
+Provide multi-year summary display and information
+<br>
+
+```{r, echo=FALSE}
+AUTO4 <- AUTO2 %>%
+  group_by(year) %>%
+  summarize(annualCons = mean(cons, na.rm = TRUE))
+
+f_labels <- tibble(
+  year = c(as.character(AUTO4$year)),
+  annCons = c(paste0("Mean: ",as.character(round(AUTO4$annualCons, 2)))))
+
+ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year), y = cons)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "", y = "l / 100 km") +
+  scale_x_continuous(breaks = c(0.25, .5, .75, 1),
+                     labels = c("Mar", "Jun", "Sep", "Dec")) +
+  facet_wrap(vars(year)) +
+  geom_text(data = f_labels, aes(label = annCons), x = 0.7, y = 2)
+
+```

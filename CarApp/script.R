@@ -15,16 +15,15 @@ AUTO2 <- tibble(read_delim(
         trim_ws = TRUE
 ))
 AUTO2 <- AUTO2 %>%
-        rename(
-                Date = Datum,
-                odometer = Kilometerstand,
-                distance = Gefahren,
-                fuel = Getankt,
-                paid = Bezahlt,
-                ppl = Preis,
-                cons = Verbrauch
-        )
-
+  rename(
+    Date = Datum,
+    odometer = Kilometerstand,
+    distance = Gefahren,
+    fuel = Getankt,
+    paid = Bezahlt,
+    ppl = Preis,
+    cons = Verbrauch) %>%
+  mutate(year = year(Date))
 
 litreSummTable <- tribble(
     ~Count, ~Minimum, ~Maximum, ~Average,
@@ -56,3 +55,25 @@ ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = distance)) 
   scale_x_continuous(breaks = c(0.25, .5, .75, 1),
                      labels = c("Mar", "Jun", "Sep", "Dec")) +
   facet_wrap(vars(year(Date)))
+
+
+AUTO4 <- AUTO2 %>%
+  group_by(year) %>%
+  summarize(annualCons = mean(cons, na.rm = TRUE))
+
+f_labels <- tibble(
+  year = c(as.character(AUTO4$year)),
+  annCons = c(as.character(round(AUTO4$annualCons, 2))))
+
+plot1 <- ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year), y = cons)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "", y = "l / 100 km") +
+  scale_x_continuous(breaks = c(0.25, .5, .75, 1),
+                     labels = c("Mar", "Jun", "Sep", "Dec")) +
+  facet_wrap(vars(year)) 
+
+plot1 +
+  geom_text(data = f_labels, aes(label = annCons), x = 0.7, y = 2)
+
+
