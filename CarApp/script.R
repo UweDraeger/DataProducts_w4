@@ -31,14 +31,6 @@ litreSummTable <- tribble(
   )
 
 
-MakeTable <- function(tblName, colName) {
-  print(paste0(tblName,"$",colName))
-#  tribble(
-#    ~Count, ~Minimum,
-#    nrow(tblName), min(paste0(tblName,"$",colName))
-#  )
-}
-
 ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = cons)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
@@ -48,14 +40,6 @@ ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = cons)) +
   facet_wrap(vars(year(Date)))
 
 
-ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year(Date)), y = distance)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "", y = "km") +
-  scale_x_continuous(breaks = c(0.25, .5, .75, 1),
-                     labels = c("Mar", "Jun", "Sep", "Dec")) +
-  facet_wrap(vars(year(Date)))
-
 
 AUTO4 <- AUTO2 %>%
   group_by(year) %>%
@@ -63,17 +47,15 @@ AUTO4 <- AUTO2 %>%
 
 f_labels <- tibble(
   year = c(as.character(AUTO4$year)),
-  annCons = c(as.character(round(AUTO4$annualCons, 2))))
+  annCons = c(paste0("Mean: ",as.character(round(AUTO4$annualCons, 2)))))
 
-plot1 <- ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year), y = cons)) +
+ggplot(data = AUTO2, aes(x = I(decimal_date(Date) - year), y = cons)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "", y = "l / 100 km") +
   scale_x_continuous(breaks = c(0.25, .5, .75, 1),
                      labels = c("Mar", "Jun", "Sep", "Dec")) +
-  facet_wrap(vars(year)) 
-
-plot1 +
+  facet_wrap(vars(year)) +
   geom_text(data = f_labels, aes(label = annCons), x = 0.7, y = 2)
 
 

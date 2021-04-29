@@ -25,9 +25,9 @@ AUTO2 <- AUTO2 %>%
     )
 
 
-# Shiny server 
+# Shiny server
 shinyServer(function(input, output) {
-
+    
     # return selection from radio button
     RadioChoice <- reactive({
         RadioChoice <- input$Radio
@@ -36,55 +36,76 @@ shinyServer(function(input, output) {
     # filter initial data to selection from radio button
     AUTO3 <- reactive({
         if (RadioChoice() == "Year")
-            AUTO2 %>% filter(year(Date) == year(as_date(paste(
-                as.character(input$SelectedYear), "-01-01"
-            ))))
+            AUTO2 %>% filter(year(Date) == year(as_date(paste(as.character(input$SelectedYear), "-01-01"))))
         else
-            AUTO2 %>% filter(Date >= input$DateRange[1] &
-                                 Date <= input$DateRange[2])
+            AUTO2 %>% filter(Date >= input$DateRange[1] & Date <= input$DateRange[2])
     })
     
-    # create summary tables 
-    nrefills <- reactive({
-        nrow(AUTO3())
-    })
-    
+    # create summary tables
     odoSummTable <- reactive({
         tribble(
-            ~StartDate, ~StartValue, ~EndDate, ~EndValue, ~Total,
-            as.character(min(AUTO3()$Date)), 
-            min(AUTO3()$odometer), 
+            ~ StartDate,
+            ~ StartValue,
+            ~ EndDate,
+            ~ EndValue,
+            ~ Total,
+            as.character(min(AUTO3()$Date)),
+            min(AUTO3()$odometer),
             as.character(max(AUTO3()$Date)),
-            max(AUTO3()$odometer), 
+            max(AUTO3()$odometer),
             max(AUTO3()$odometer) - min(AUTO3()$odometer)
-            )
-        })
-
-    distSummTable <- reactive({
-        tribble(
-            ~Count, ~Minimum, ~Maximum, ~Average,
-            nrow(AUTO3()), min(AUTO3()$distance), max(AUTO3()$distance), mean(AUTO3()$distance)
-            )
-        })
-
-    litreSummTable <- reactive({
-        tribble(
-            ~Count, ~Minimum, ~Maximum, ~Average,
-            nrow(AUTO3()), min(AUTO3()$fuel, na.rm = TRUE), max(AUTO3()$fuel, na.rm = TRUE), mean(AUTO3()$fuel, na.rm = TRUE)
         )
     })
- 
+    
+    distSummTable <- reactive({
+        tribble(
+            ~ Count,
+            ~ Minimum,
+            ~ Maximum,
+            ~ Average,
+            nrow(AUTO3()),
+            min(AUTO3()$distance),
+            max(AUTO3()$distance),
+            mean(AUTO3()$distance)
+        )
+    })
+    
+    litreSummTable <- reactive({
+        tribble(
+            ~ Count,
+            ~ Minimum,
+            ~ Maximum,
+            ~ Average,
+            nrow(AUTO3()),
+            min(AUTO3()$fuel, na.rm = TRUE),
+            max(AUTO3()$fuel, na.rm = TRUE),
+            mean(AUTO3()$fuel, na.rm = TRUE)
+        )
+    })
+    
     paidSummTable <- reactive({
         tribble(
-            ~Count, ~Minimum, ~Maximum, ~Average,
-            nrow(AUTO3()),min(AUTO3()$paid), max(AUTO3()$paid), mean(AUTO3()$paid)
+            ~ Count,
+            ~ Minimum,
+            ~ Maximum,
+            ~ Average,
+            nrow(AUTO3()),
+            min(AUTO3()$paid),
+            max(AUTO3()$paid),
+            mean(AUTO3()$paid)
         )
     })
     
     consSummTable <- reactive({
         tribble(
-            ~Count, ~Minimum, ~Maximum, ~Average,
-            nrow(AUTO3()), min(AUTO3()$cons, na.rm = TRUE), max(AUTO3()$cons, na.rm = TRUE), mean(AUTO3()$cons, na.rm = TRUE)
+            ~ Count,
+            ~ Minimum,
+            ~ Maximum,
+            ~ Average,
+            nrow(AUTO3()),
+            min(AUTO3()$cons, na.rm = TRUE),
+            max(AUTO3()$cons, na.rm = TRUE),
+            mean(AUTO3()$cons, na.rm = TRUE)
         )
     })
     
@@ -92,10 +113,9 @@ shinyServer(function(input, output) {
         AUTO3() %>%
             mutate(Date = as.character(AUTO3()$Date))
     })
-        
-    output$nrefills <- renderText(nrefills())
     
-    # Tables
+
+    # output tables
     output$odoSummary <- renderTable(odoSummTable())
     output$distSummary <- renderTable(distSummTable())
     output$litreSummary <- renderTable(litreSummTable())
@@ -103,11 +123,10 @@ shinyServer(function(input, output) {
     output$consSummary <- renderTable(consSummTable())
     output$dataSummary <- renderDataTable(dataSummTable())
     
-    # Charts
+    # create and output charts
     output$odometer <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = Date, y = odometer)) +
+        ggplot(data = AUTO3(),
+               aes(x = Date, y = odometer)) +
             geom_point(color = "#dd4814") +
             geom_smooth() +
             geom_smooth(color = "black", se = FALSE) +
@@ -116,53 +135,50 @@ shinyServer(function(input, output) {
                  y = "Distance in km")
     })
     output$distance <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = distance)) +
+        ggplot(data = AUTO3(),
+               aes(x = distance)) +
             geom_histogram(binwidth = 50) +
             labs(title = "",
                  x = "Distance",
                  y = "Count")
-    })    
+    })
     output$fuel <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = fuel)) +
+        ggplot(data = AUTO3(),
+               aes(x = fuel)) +
             geom_histogram(binwidth = 5) +
             labs(title = "",
                  x = "Amount",
                  y = "Count")
-    })    
+    })
     output$paid <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = paid)) +
+        ggplot(data = AUTO3(),
+               aes(x = paid)) +
             geom_histogram(binwidth = 5) +
             labs(title = "",
                  x = "Amount",
                  y = "Count")
-    })    
+    })
     output$price <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = Date, y = price)) +
+        ggplot(data = AUTO3(),
+               aes(x = Date, y = price)) +
             geom_point(color = "#dd4814") +
             geom_smooth() +
             geom_smooth(color = "black", se = FALSE) +
             labs(title = "",
                  x = "Date",
                  y = "Price")
-    })    
+    })
     output$cons <- renderPlotly({
-        ggplot(
-            data = AUTO3(),
-            aes(x = Date, y = cons)) +
+        ggplot(data = AUTO3(),
+               aes(x = Date, y = cons)) +
             geom_point(color = "#dd4814") +
             geom_smooth(method = "lm") +
-            geom_smooth(method = "lm", color = "black", se = FALSE) +
+            geom_smooth(method = "lm",
+                        color = "black",
+                        se = FALSE) +
             labs(title = "",
                  x = "Date",
                  y = "Consumption")
     })
-   
+    
 })
